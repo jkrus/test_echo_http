@@ -17,7 +17,7 @@ func main() {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	db, err := repository.NewJSONDB("data.json")
+	db, err := repository.NewJSONDB("users.json")
 	if err != nil {
 		logrus.Fatal(err.Error())
 	}
@@ -27,11 +27,15 @@ func main() {
 
 	serv := new(server.Server)
 
+	err = serv.Run(viper.GetString("port"), handlers.InitRoutes())
+
 	go func() {
-		if err := serv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+		if err != nil {
 			logrus.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
+
+	logrus.Print("TodoApp Started")
 }
 
 func initConfig() error {

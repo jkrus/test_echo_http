@@ -2,25 +2,22 @@ package repository
 
 import (
 	"github.com/jkrus/test_echo_http/pkg/model"
-	"os"
 )
 
-type User interface {
-	Create(userId int, user model.User) (int, error)
+type Users interface {
+	Create(user model.User) (int, error)
 	GetAll() ([]model.User, error)
-	GetById(userId int) (model.User, error)
-	Delete(userId int) error
-	Update(userId int, input model.User) error
+	GetById(user model.User) (model.User, error)
+	Delete(user model.User) error
+	Update(input model.User) error
 }
 
 type Repository struct {
-	User
-	Users *[]model.User
+	Users
 }
 
-func NewRepository(file *os.File) *Repository {
+func NewRepository(db *JsonDb) *Repository {
 	return &Repository{
-		User:  NewUserJSON(file),
-		Users: new([]model.User),
+		Users: NewUsersJSON(db),
 	}
 }

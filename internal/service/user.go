@@ -6,35 +6,30 @@ import (
 )
 
 type UserService struct {
-	repo repository.User
+	repo repository.Users
 }
 
-func (s UserService) Create(userId int, user model.User) (int, error) {
-
-	return 0, nil
+func (s *UserService) Create(user model.User) (int, error) {
+	return s.repo.Create(user)
 }
 
-func (s UserService) GetAll() ([]model.User, error) {
-
-	return nil, nil
+func (s *UserService) GetAll() ([]model.User, error) {
+	return s.repo.GetAll()
 }
 
-func (s UserService) GetById(userId int) (model.User, error) {
-
-	var v = model.User{}
-	return v, nil
+func (s *UserService) GetById(user model.User) (model.User, error) {
+	return s.repo.GetById(user)
 }
 
-func (s UserService) Delete(userId int) error {
+func (s *UserService) Delete(user model.User) error {
+	return s.repo.Delete(user)
+}
 
+func (s *UserService) Update(input model.User) error {
+	s.repo.Update(input)
 	return nil
 }
 
-func (s UserService) Update(userId int, input model.User) error {
-
-	return nil
-}
-
-func NewUserService(repo repository.User) *UserService {
+func NewUserService(repo repository.Users) *UserService {
 	return &UserService{repo: repo}
 }

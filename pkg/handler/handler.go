@@ -23,6 +23,5 @@ func (h *Handler) InitRoutes() *echo.Echo {
 		user.PUT("/:id", h.updateUser)
 		user.DELETE("/:id", h.deleteUser)
 	}
-
 	return router
 }

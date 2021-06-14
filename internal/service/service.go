@@ -6,11 +6,11 @@ import (
 )
 
 type User interface {
-	Create(userId int, user model.User) (int, error)
+	Create(user model.User) (int, error)
 	GetAll() ([]model.User, error)
-	GetById(userId int) (model.User, error)
-	Delete(userId int) error
-	Update(userId int, input model.User) error
+	GetById(user model.User) (model.User, error)
+	Delete(user model.User) error
+	Update(input model.User) error
 }
 
 type Service struct {
@@ -19,6 +19,6 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		User: NewUserService(repos.User),
+		User: NewUserService(repos.Users),
 	}
 }
