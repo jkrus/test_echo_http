@@ -9,5 +9,3 @@ PUT /user/update{id,name}
 DELETE /user/delete{id}
 
 name must compile with regular expression ([A-Z])\w+
-
-
