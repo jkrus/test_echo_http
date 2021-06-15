@@ -26,8 +26,7 @@ func (s *UserService) Delete(user model.User) error {
 }
 
 func (s *UserService) Update(input model.User) error {
-	s.repo.Update(input)
-	return nil
+	return s.repo.Update(input)
 }
 
 func NewUserService(repo repository.Users) *UserService {

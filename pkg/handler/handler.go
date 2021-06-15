@@ -19,9 +19,9 @@ func (h *Handler) InitRoutes() *echo.Echo {
 	{
 		user.POST("/create", h.createUser)
 		user.GET("/all", h.getAllUsers)
-		user.GET("/:id", h.getById)
-		user.PUT("/:id", h.updateUser)
-		user.DELETE("/:id", h.deleteUser)
+		user.GET("/get", h.getById)
+		user.PUT("/update", h.updateUser)
+		user.DELETE("/delete", h.deleteUser)
 	}
 	return router
 }

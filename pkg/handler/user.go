@@ -4,7 +4,6 @@ import (
 	"github.com/jkrus/test_echo_http/pkg/model"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"strconv"
 )
 
 func (h *Handler) createUser(c echo.Context) error {
@@ -39,16 +38,21 @@ func (h *Handler) getAllUsers(c echo.Context) error {
 }
 
 func (h *Handler) getById(c echo.Context) error {
+	type tempUser struct {
+		Id int `validate:"required"`
+	}
 	var (
 		input model.User
 		err   error
+		u     tempUser
 	)
-	input.Id, err = strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+
+	if err := c.Bind(&u); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return err
 	}
 
+	input.Id = u.Id
 	user, err := h.services.User.GetById(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -70,14 +74,8 @@ func (h *Handler) updateUser(c echo.Context) error {
 		return err
 	}
 
-	input.Id, err = strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-		return err
-	}
-
 	if err := h.services.User.Update(input); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return err
 	}
 
@@ -86,22 +84,25 @@ func (h *Handler) updateUser(c echo.Context) error {
 }
 
 func (h *Handler) deleteUser(c echo.Context) error {
+	type tempUser struct {
+		Id int `json:"id"`
+	}
 	var (
 		input model.User
 		err   error
+		u     tempUser
 	)
-	input.Id, err = strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+	if err := c.Bind(&u); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return err
 	}
 
+	input.Id = u.Id
 	err = h.services.User.Delete(input)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return err
 	}
-
 	c.JSON(http.StatusOK, statusResponse{
 		Status: "ok",
 	})
